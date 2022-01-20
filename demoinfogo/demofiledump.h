@@ -25,9 +25,17 @@
 #ifndef DEMOFILEDUMP_H
 #define DEMOFILEDUMP_H
 
+#include <iostream>
+#include <string>
 #include "demofile.h"
 #include "demofilebitbuf.h"
 #include "demofilepropdecode.h"
+#include "player.h"
+#include "bombentity.h"
+#include "grenadeentity.h"
+#include "playerdeathevent.h"
+#include "tickinfo.h"
+#include "enums.h"
 
 #include "generated_proto/netmessages_public.pb.h"
 
@@ -89,6 +97,8 @@ struct player_info_t
 	unsigned char	filesDownloaded;
 	// entity index
 	int				entityID;
+
+	int 			internalID;
 };
 
 struct ExcludeEntry
@@ -171,10 +181,6 @@ struct EntityEntry
 	}
 	void AddOrUpdateProp( FlattenedPropEntry *pFlattenedProp, Prop_t *pPropValue )
 	{
-		//if ( m_uClass == 34 && pFlattenedProp->m_prop->var_name().compare( "m_vecOrigin" ) == 0 )
-		//{
-		//	printf("got vec origin!\n" );
-		//}
 		PropEntry *pProp = FindProp( pFlattenedProp->m_prop->var_name().c_str() );
 		if ( pProp )
 		{
@@ -225,19 +231,46 @@ public:
 	}
 
 	bool Open( const char *filename ); 
-	void DoDump();
+	const CSVCMsg_GameEventList::descriptor_t *GetGameEventDescriptor( const CSVCMsg_GameEvent &msg, CDemoFileDump& Demo );
+	int ReadFieldIndex( CBitRead &entityBitBuffer, int lastIndex, bool bNewWay );
+	bool ReadNewEntity( CBitRead &entityBitBuffer, EntityEntry *pEntity );
+	EntityEntry *FindEntity( int nEntity );
+	EntityEntry *AddEntity( int nEntity, uint32 uClass, uint32 uSerialNum );
+	void RemoveEntity( int nEntity );
 	void HandleDemoPacket();
 
-public:
+	void MsgPrintf( const ::google::protobuf::Message& msg, int size, const char *fmt, ... );
 	void DumpDemoPacket( CBitRead &buf, int length );
 	void DumpUserMessage( const void *parseBuffer, int BufferSize );
-	void MsgPrintf( const ::google::protobuf::Message& msg, int size, const char *fmt, ... );
+	
+	void ParseToEnd();
+	bool ParseNextTick();
+	bool ParseTick();
+	void ParseGameEvent( const CSVCMsg_GameEvent& msg, const CSVCMsg_GameEventList::descriptor_t* pDescriptor );
 
-public:
+
 	CDemoFile m_demofile;
 	CSVCMsg_GameEventList m_GameEventList;
 
 	int m_nFrameNumber;
+
+private:
+	void CleanUp();
+	Player *FindPlayerInstance( int internalID );
+	Player *FindPlayerInstanceByGUID( int GUID );
+	void SetRemoveGrenadeEntity( int entityID );
+	void HandlePlayerConnection( const CSVCMsg_GameEvent &msg, const CSVCMsg_GameEventList::descriptor_t *pDescriptor, bool connection );
+	void HandleBombEvent( const CSVCMsg_GameEvent &msg, const CSVCMsg_GameEventList::descriptor_t *pDescriptor, BombEvent event );
+	void HandleGrenadeEvent( const CSVCMsg_GameEvent &msg, const CSVCMsg_GameEventList::descriptor_t *pDescriptor, GrenadeEvent event );
+	void HandleWeaponFire( const CSVCMsg_GameEvent &msg, const CSVCMsg_GameEventList::descriptor_t *pDescriptor );
+	void HandlePlayerBlind( const CSVCMsg_GameEvent &msg, const CSVCMsg_GameEventList::descriptor_t *pDescriptor );
+	void HandlePlayerHurt( const CSVCMsg_GameEvent &msg, const CSVCMsg_GameEventList::descriptor_t *pDescriptor );
+	void HandlePlayerDeath( const CSVCMsg_GameEvent &msg, const CSVCMsg_GameEventList::descriptor_t *pDescriptor );
+	void TickCleanUp();
+	void HandleRoundCleanUp();
+
+	void GetPlayerInfo();
+	bool ShowPlayerInfo( const char *pField, int nIndex, bool bShowDetails = true, bool bCSV = false );
 };
 
 #endif // DEMOFILEDUMP_H

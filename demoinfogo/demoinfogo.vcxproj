@@ -15,18 +15,21 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>demoinfo2</RootNamespace>
     <ProjectName>demoinfogo</ProjectName>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -43,6 +46,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>.\Test</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -69,6 +73,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>protobuf-2.5.0\src\</AdditionalIncludeDirectories>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -112,6 +117,7 @@ protoc-2.5.0-win32\protoc.exe --proto_path=.\protobuf-2.5.0\src --proto_path=. -
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="bombentity.cpp" />
     <ClCompile Include="demofile.cpp" />
     <ClCompile Include="demofilebitbuf.cpp" />
     <ClCompile Include="demofiledump.cpp" />
@@ -119,14 +125,27 @@ protoc-2.5.0-win32\protoc.exe --proto_path=.\protobuf-2.5.0\src --proto_path=. -
     <ClCompile Include="demofilepropdecode.cpp" />
     <ClCompile Include="generated_proto\cstrike15_usermessages_public.pb.cc" />
     <ClCompile Include="generated_proto\netmessages_public.pb.cc" />
+    <ClCompile Include="grenadeentity.cpp" />
+    <ClCompile Include="player.cpp" />
+    <ClCompile Include="playerdeathevent.cpp" />
+    <ClCompile Include="playerhurtevent.cpp" />
+    <ClCompile Include="tickinfo.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bombentity.h" />
     <ClInclude Include="demofile.h" />
     <ClInclude Include="demofilebitbuf.h" />
     <ClInclude Include="demofiledump.h" />
     <ClInclude Include="demofilepropdecode.h" />
+    <ClInclude Include="enums.h" />
     <ClInclude Include="generated_proto\cstrike15_usermessages_public.pb.h" />
     <ClInclude Include="generated_proto\netmessages_public.pb.h" />
+    <ClInclude Include="grenadeentity.h" />
+    <ClInclude Include="json.hpp" />
+    <ClInclude Include="player.h" />
+    <ClInclude Include="playerdeathevent.h" />
+    <ClInclude Include="playerhurtevent.h" />
+    <ClInclude Include="tickinfo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

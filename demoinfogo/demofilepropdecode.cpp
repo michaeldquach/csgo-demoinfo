@@ -253,7 +253,7 @@ Prop_t *Array_Decode( CBitRead &entityBitBuffer, FlattenedPropEntry *pFlattenedP
 
 	if ( !bQuiet )
 	{
-		printf( "array with %d elements of %d max\n", nElements, nNumElements );
+		//printf( "array with %d elements of %d max\n", nElements, nNumElements );
 	}
 
 	for ( int i = 0; i < nElements; i++ )
@@ -280,7 +280,7 @@ Prop_t *DecodeProp( CBitRead &entityBitBuffer, FlattenedPropEntry *pFlattenedPro
 
 	if ( !bQuiet )
 	{
-		printf( "Field: %d, %s = ", nFieldIndex, pSendProp->var_name().c_str() );
+		//printf( "Field: %d, %s = ", nFieldIndex, pSendProp->var_name().c_str() );
 	}
 	switch ( pSendProp->type() )
 	{
@@ -310,7 +310,7 @@ Prop_t *DecodeProp( CBitRead &entityBitBuffer, FlattenedPropEntry *pFlattenedPro
 	}
 	if ( !bQuiet )
 	{
-		pResult->Print();
+		//pResult->Print();
 	}
 
 	return pResult;
